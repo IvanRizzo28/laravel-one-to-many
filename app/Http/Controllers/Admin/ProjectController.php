@@ -45,7 +45,6 @@ class ProjectController extends Controller
         if(isset($data['image'])){
             $data['image']=Storage::put('uploads',$data['image']);
         }
-        dd($data);
         Project::create($data);
         return redirect()->route('admin.dashboard')->with('message','Project aggiunto con successo');
     }

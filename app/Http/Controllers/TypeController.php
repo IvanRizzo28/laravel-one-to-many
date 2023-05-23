@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Models\Project;
 use App\Models\Type;
+use App\Models\Project;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTypeRequest;
+use App\Http\Requests\UpdateTypeRequest;
 
 class TypeController extends Controller
 {
@@ -35,10 +39,15 @@ class TypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTypeRequest $request)
     {
-        //
+        $data=$request->validated();
+        $data=array_merge($data,['slug'=>Str::slug($data['name'])]);
+
+        Type::create($data);
+        return redirect()->route('admin.type.index')->with('message','Tipo aggiunto con successo');
     }
+
 
     /**
      * Display the specified resource.
@@ -60,7 +69,8 @@ class TypeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data=Type::findOrfail($id);
+        return view('admin.type.edit',compact('data'));
     }
 
     /**
@@ -70,9 +80,13 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTypeRequest $request, $id)
     {
-        //
+        $data=$request->validated();
+        $item=Type::findOrFail($id);
+        $data=array_merge($data,['slug'=>Str::slug($data['name'])]);
+        $item->update($data);
+        return to_route('admin.type.index')->with('message','Il tipo è stato aggiornato con successo');
     }
 
     /**

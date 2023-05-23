@@ -7,6 +7,11 @@
                 {{ session('delete') }}
             </div>
         @endif
+        @if (session('message'))
+            <div class="alert alert-success" role="alert">
+                {{ session('message') }}
+            </div>
+        @endif
         <div class="card">
             <h5 class="card-header">{{ __('Types') }}</h5>
             <div class="card-body">
